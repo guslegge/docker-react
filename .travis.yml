@@ -1,0 +1,25 @@
+language: generic
+sudo: required
+services:
+    - docker
+    
+before_install:
+    - docker build -t guslegge/docker-react -f Dockerfile.dev .
+    
+script:
+    - docker run -e CI=true USERNAME/docker-react npm run test
+    
+    
+deploy:
+    provider: elasticbeanstalk
+    region: "eu-west-1"
+    app: "docker-react2"
+    env: "Dockerreact2-env"
+    bucket_name: "elasticbeanstalk-eu-west-1-531333889525Info"
+    bucket_path: "docker-react"
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: $AWS_SECRET_KEY
+
+
